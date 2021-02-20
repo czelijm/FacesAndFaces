@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Faces", "Faces", "{11E9C916-8F74-4EF5-89C5-A182B9E4DA07}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FacesApi", "Faces\FacesApi\FacesApi.csproj", "{EA7E6A87-E87F-457D-B7FE-D4AA1830DBB1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FacesApi", "Faces\FacesApi\FacesApi.csproj", "{EA7E6A87-E87F-457D-B7FE-D4AA1830DBB1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FacesApiTest", "Faces\FacesApiTest\FacesApiTest.csproj", "{C2D53A45-DB16-4C19-A7FD-870EF6B6F23D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,12 +19,17 @@ Global
 		{EA7E6A87-E87F-457D-B7FE-D4AA1830DBB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EA7E6A87-E87F-457D-B7FE-D4AA1830DBB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EA7E6A87-E87F-457D-B7FE-D4AA1830DBB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2D53A45-DB16-4C19-A7FD-870EF6B6F23D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2D53A45-DB16-4C19-A7FD-870EF6B6F23D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2D53A45-DB16-4C19-A7FD-870EF6B6F23D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2D53A45-DB16-4C19-A7FD-870EF6B6F23D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{EA7E6A87-E87F-457D-B7FE-D4AA1830DBB1} = {11E9C916-8F74-4EF5-89C5-A182B9E4DA07}
+		{C2D53A45-DB16-4C19-A7FD-870EF6B6F23D} = {11E9C916-8F74-4EF5-89C5-A182B9E4DA07}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E714B01E-03A4-4B1E-ACF5-2247A46436E9}

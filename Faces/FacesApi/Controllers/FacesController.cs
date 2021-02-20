@@ -21,13 +21,14 @@ namespace FacesApi.Controllers
             using (var ms = new MemoryStream(2048))
             {
                 await Request.Body.CopyToAsync(ms);
-                var facess = GetFaces(ms.ToArray());
+                var faces = GetFaces(ms.ToArray());
+                return faces;
             }
 
-            throw new NotImplementedException();
+            
         }
 
-        private object GetFaces(byte[] image)
+        private List<byte[]> GetFaces(byte[] image)
         {
             Mat src = Cv2.ImDecode(image,ImreadModes.Color);
             //for veryfication purpose
