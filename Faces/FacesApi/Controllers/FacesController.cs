@@ -24,8 +24,7 @@ namespace FacesApi.Controllers
                 var faces = GetFaces(ms.ToArray());
                 return faces;
             }
-
-            
+  
         }
 
         private List<byte[]> GetFaces(byte[] image)
