@@ -14,7 +14,7 @@ namespace Messaging.InterfacesConstants.Constants
         public const string RabbitMquri = "rabbitmq://rabbitmq/";
         public const string UserName = "guest";
         public const string Password = "guest";
-        //this is the point, where our MVC project will sendthe data to
+        //this is the point, where our MVC project will send the data to
         public const string RegisterOrderCommandQueue = "register.order.command";
 
     }

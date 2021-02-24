@@ -64,7 +64,7 @@ namespace Faces.WebMvc.Controllers
                     model.FileUrl
                 }
             );
-
+            ViewData["Id"] = model.Id;
             return View("Thanks");
         }
 
