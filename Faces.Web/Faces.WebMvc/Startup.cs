@@ -29,7 +29,11 @@ namespace Faces.WebMvc
             services.AddSingleton(provider=>Bus.Factory.CreateUsingRabbitMq
                 (cfg => 
                     {
-                        cfg.Host("localhost", "/", h=> { });//blank for default parameters
+                        cfg.Host(
+                             Messaging.InterfacesConstants.Constants.RabbitMqMassTransitConstants.HostName, 
+                            "/", 
+                            h=> { }
+                        );//blank for default parameters
                         services.AddSingleton<IBusControl>(provider => provider.GetRequiredService<IBusControl>());
                         services.AddSingleton<IHostedService, BusService>();
                     }
