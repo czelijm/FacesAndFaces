@@ -108,6 +108,19 @@ namespace OrdersApi
 
             services.AddHttpClient();
 
+            //for order api endpoint to be called from other servers, we have to add cross origin resource policy
+            services.AddCors(options=> 
+            {
+                //we allow any request type, credentials type, header type to be able to reach API endpoints
+                options.AddPolicy("CorsPolicy",
+                    builder=> builder
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .SetIsOriginAllowed(host=>true)
+                    .AllowCredentials()
+                    );
+            });
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -124,6 +137,8 @@ namespace OrdersApi
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "OrdersApi v1"));
             }
+
+            app.UseCors("CorsPolicy");
 
             app.UseRouting();
 

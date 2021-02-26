@@ -1,3 +1,4 @@
+using Faces.WebMvc.RestClients;
 using Faces.WebMvc.Services;
 using MassTransit;
 using Microsoft.AspNetCore.Builder;
@@ -40,6 +41,10 @@ namespace Faces.WebMvc
                     
                 )//multiple transports can be supported via specific interface
             );
+
+            services.AddHttpClient<IOrderManagementApi,OrderManagementApi>();
+
+
             services.AddControllersWithViews();
         }
 
