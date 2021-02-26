@@ -14,15 +14,17 @@ namespace FacesApi.Controllers
     public class FacesController : ControllerBase
     {
         [HttpPost]
-        public async Task<List<byte[]>> ReadFaces() 
-        {
+        public async Task<Tuple<List<byte[]>,Guid>> ReadFaces(Guid orderId) 
+        {        
             //memory stream for storing image data,
             //Read data in 2048 size chunks
             using (var ms = new MemoryStream(2048))
             {
                 await Request.Body.CopyToAsync(ms);
+                if (ms.Length<1) return new Tuple<List<byte[]>, Guid>(null, orderId);
                 var faces = GetFaces(ms.ToArray());
-                return faces;
+                //return faces;
+                return new Tuple<List<byte[]>, Guid>(faces,orderId);
             }
   
         }

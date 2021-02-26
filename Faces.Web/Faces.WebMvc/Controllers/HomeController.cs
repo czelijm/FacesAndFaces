@@ -56,11 +56,11 @@ namespace Faces.WebMvc.Controllers
             var endPoint = await _busControl.GetSendEndpoint(sendToUri);
             await endPoint.Send<IRegisterOrderCommand>
             (
-                new 
+                new
                 {
-                    model.Id,
-                    model.Email,
-                    model.FileData,
+                    OrderId = model.Id, //becouse the name in the IRegisterOrderCommand is diffrent we have to add name here
+                    model.Email,        //in other cases name of the property will be inhereted, and it will be the same like in IRegisterOrderCommand
+                    model.FileData,     
                     model.FileUrl
                 }
             );

@@ -104,6 +104,10 @@ namespace OrdersApi
             //register our sevice in dependency injection
             services.AddSingleton<IHostedService, BusService>();
 
+            services.AddTransient<IOrderRepository, OrderRepository>();
+
+            services.AddHttpClient();
+
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
