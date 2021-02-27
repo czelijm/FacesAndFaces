@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Faces.WebMvc.RestClients
 {
-    interface IOrderManagementApi
+    public interface IOrderManagementApi
     {
         //refit library was used to make things easier; For http request.
         //it's not recomendet to use refit for complex objects like in ex. tuple used in orderApi. 

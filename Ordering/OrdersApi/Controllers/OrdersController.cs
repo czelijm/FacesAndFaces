@@ -24,16 +24,17 @@ namespace OrdersApi.Controllers
             var data = await _orderRepository.GetOrdersAsync();
             return Ok(data);
         }
+        //[HttpGet]
+        //public async Task<IActionResult> GetOrderByIdGuidAsync(Guid id) 
+        //{
+        //    var data = await _orderRepository.GetOrderAsync(id);
+        //    return data is null? NotFound() : Ok(data);
+        //}        
         [HttpGet]
-        public async Task<IActionResult> GetOrderByIdAsync(Guid id) 
+        [Route("{orderId}",Name = "GetOrderByIdAsync")]
+        public async Task<IActionResult> GetOrderByIdAsync(string orderId) 
         {
-            var data = await _orderRepository.GetOrderAsync(id);
-            return data is null? NotFound() : Ok(data);
-        }        
-        [HttpGet]
-        public async Task<IActionResult> GetOrderByIdAsync(string id) 
-        {
-            var data = await _orderRepository.GetOrderAsync(Guid.Parse(id));
+            var data = await _orderRepository.GetOrderAsync(Guid.Parse(orderId));
             return data is null ? NotFound() : Ok(data);
         }
 
