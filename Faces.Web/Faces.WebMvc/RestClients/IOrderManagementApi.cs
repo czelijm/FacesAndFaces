@@ -17,8 +17,8 @@ namespace Faces.WebMvc.RestClients
         [Get("/orders")] // from refit library
         Task<List<OrderViewModel>> GetOrders();
         
-        [Get("/orders")] // from refit library
-        Task<List<OrderViewModel>> GetOrderbyId(Guid orderId);
+        [Get("/orders/{orderId}")] // from refit library
+        Task<OrderViewModel> GetOrderbyId(Guid orderId);
         
 
     }
