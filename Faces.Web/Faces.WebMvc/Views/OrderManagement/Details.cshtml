@@ -1,0 +1,49 @@
+﻿@model Faces.WebMvc.Models.ViewModels.OrderViewModel
+
+@{
+    ViewData["Title"] = "Order Details";
+}
+
+
+<h3>Order Details </h3>
+
+<div class="row">
+    <div class="col-3">Order Id: </div>
+    <div class="col-3">@Model.Id</div>
+</div>
+<div class="row">
+    <div class="col-3">Email: </div>
+    <div class="col-3">@Model.Email</div>
+</div>
+<div class="row">
+    <div class="col-3">Picture: </div>
+    <div class="col-3"><img src="@Model.FileUrl" width="100px" height="100px" /></div>
+</div>
+<div class="row">
+    <div class="col-3">Order Status: </div>
+    <div class="col-3">@Model.Status</div>
+</div>
+
+@if (Model.OrderDetails.Count > 0)
+{
+    <div class="row">
+        <div class="col-1">Order detail Id </div>
+        <div class="col-1">Detected Face</div>
+    </div>
+
+    @foreach (var item in Model.OrderDetails)
+    {
+        <div class="row">
+            <div class="col-1">@item.OrderDetailId </div>
+            <div class="col-1"><img src="@item.FileUrl" width="40px" height="40px" /></div>
+        </div>
+    }
+
+}
+else
+{
+    <div class="row text-center">
+        <h4>No Face detected :(</h4>
+    </div>
+}
+

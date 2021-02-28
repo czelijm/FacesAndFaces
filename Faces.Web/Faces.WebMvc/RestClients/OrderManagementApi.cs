@@ -18,7 +18,15 @@ namespace Faces.WebMvc.RestClients
             string apiHostAndPort = configuration.GetSection("ApiServiceLocations")
                 .GetValue<string>("OrdersApiLocations");
             httpClient.BaseAddress = new Uri($"http://{apiHostAndPort}/api");
-            _restClient = RestService.For<IOrderManagementApi>(httpClient);
+            //from refit github page
+            _restClient = RestService.For<IOrderManagementApi>(httpClient
+            //    ,new RefitSettings 
+            //{
+            //    ContentSerializer = new NewtonsoftJsonContentSerializer { 
+            //        new SystemTextJsonContentSerializer()
+            //    }
+            //}
+            );
         }
 
         public async Task<OrderViewModel> GetOrderbyId(Guid orderId)

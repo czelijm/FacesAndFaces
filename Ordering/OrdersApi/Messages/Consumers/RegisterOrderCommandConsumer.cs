@@ -27,7 +27,7 @@ namespace OrdersApi.Messages.Consumers
         {
             var result = context.Message;
             if (result != null 
-                && result.Email!=null && !(result.OrderId.Equals(Guid.Empty)) //Guid is always not null. for testing We have sended empty guid,
+                && result.Email!=null && !(result.Id.Equals(Guid.Empty)) //Guid is always not null. for testing We have sended empty guid,
                 && result.FileData!=null && result.FileUrl!=null
                 )
             {
@@ -35,7 +35,7 @@ namespace OrdersApi.Messages.Consumers
 
                 //connetct to api via http, no messagebroker part
                 var client = _httpClientFactory.CreateClient();
-                Tuple<List<byte[]>,Guid> orderDetailData = await GetFacesFromFaceApiAsync(client, result.FileData, result.OrderId);
+                Tuple<List<byte[]>,Guid> orderDetailData = await GetFacesFromFaceApiAsync(client, result.FileData, result.Id);
                 List<byte[]> faces = orderDetailData.Item1;
                 Guid orderId = orderDetailData.Item2;
                 SaveOrderDeteils(orderId,faces);
@@ -89,7 +89,7 @@ namespace OrdersApi.Messages.Consumers
             Order order = new Order
             {
                 Email = result.Email,
-                Id = result.OrderId,
+                Id = result.Id,
                 FileData = result.FileData,
                 FileUrl = result.FileUrl,
                 Status = Status.Registered

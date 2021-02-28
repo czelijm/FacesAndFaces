@@ -1,4 +1,5 @@
 ﻿using Faces.WebMvc.RestClients;
+using Faces.WebMvc.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,19 @@ namespace Faces.WebMvc.Controllers
             return View(result);
         }
 
+        [Route("/details/{orderId}")]
+        public async Task<IActionResult> Details(string orderId) 
+        {
+            var order = await _orderManagementApi.GetOrderbyId(Guid.Parse(orderId));
+            if (order == null) return NotFound();
+            order.FileUrl = ConvertAndFormatToString(order.FileData);
+            order.OrderDetails.ForEach(detail => 
+            {
+                detail.FileUrl = ConvertAndFormatToString(detail.FileData);
+            });
+
+            return View(order);
+        }
 
         private string ConvertAndFormatToString(byte[] imageData)
         {

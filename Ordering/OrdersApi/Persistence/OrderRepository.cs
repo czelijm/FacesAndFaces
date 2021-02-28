@@ -23,7 +23,12 @@ namespace OrdersApi.Persistence
 
         public async Task<Order> GetOrderAsync(Guid id)
         {
-            return await _ordersContext.Orders.Include("OrderDetails").FirstOrDefaultAsync(o=>o.Id == id);
+            //return await _ordersContext.Orders.Include("OrderDetails").FirstOrDefaultAsync(o=>o.Id == id);
+
+
+            var result = await _ordersContext.Orders.Include(o=>o.OrderDetails).FirstOrDefaultAsync(o=>o.Id == id);
+            //await _ordersContext.Entry(result).Collection(o => o.OrderDetails).LoadAsync();
+            return result;
         }
 
         public async Task<IEnumerable<Order>> GetOrdersAsync()

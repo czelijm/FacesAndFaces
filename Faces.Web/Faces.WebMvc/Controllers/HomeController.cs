@@ -58,7 +58,7 @@ namespace Faces.WebMvc.Controllers
             (
                 new
                 {
-                    OrderId = model.Id, //becouse the name in the IRegisterOrderCommand is diffrent we have to add name here
+                    model.Id,//Id = model.OrderId, //becouse the name in the IRegisterOrderCommand is diffrent we have to add name here
                     model.Email,        //in other cases name of the property will be inhereted, and it will be the same like in IRegisterOrderCommand
                     model.FileData,     
                     model.FileUrl
