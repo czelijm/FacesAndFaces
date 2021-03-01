@@ -39,7 +39,9 @@ namespace OrdersApi
 
             services.AddMassTransit(c =>
                {
+                   //there will be 2 consumers
                    c.AddConsumer<RegisterOrderCommandConsumer>();
+                   c.AddConsumer<OrderDispatchedEventConsumer>();
 
                    c.UsingRabbitMq((contex,cfg)=> 
                    {
@@ -60,6 +62,20 @@ namespace OrdersApi
                                     )); //retry policy of 10s, try 2 times 
                                 e.Consumer<RegisterOrderCommandConsumer>(contex);
                             });
+                       //Another endpoint for another queue
+                       cfg.ReceiveEndpoint(
+                            RabbitMqMassTransitConstants.OrderDispatchedServiceQueue,
+                            e =>
+                            {
+                                e.PrefetchCount = 16;//nuber of concurrent messages
+                                e.UseMessageRetry(
+                                    x => x.Interval(
+                                        RabbitMqMassTransitConstants.RetryNumber,
+                                        TimeSpan.FromSeconds(RabbitMqMassTransitConstants.ItervalWaitTimeInSeconds)
+                                    )); //retry policy of 10s, try 2 times 
+                                e.Consumer<OrderDispatchedEventConsumer>(contex);
+                            });
+
                        cfg.ConfigureEndpoints(contex);
                    });//resiliency setup; fetching data over the wire
             });

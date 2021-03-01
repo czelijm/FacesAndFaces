@@ -1,4 +1,5 @@
-﻿using MassTransit;
+﻿using EmailService;
+using MassTransit;
 using Messaging.InterfacesConstants.Events;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,14 @@ namespace NotificationService.Consumer
 {
     public class OrderProcessedEventConsumer : IConsumer<IOrderProcessedEvent>
     {
+
+        private readonly IEmailSender _emailSender;
+
+        public OrderProcessedEventConsumer(IEmailSender emailSender)
+        {
+            _emailSender = emailSender;
+        }
+
         public async Task Consume(ConsumeContext<IOrderProcessedEvent> context)
         {
             var rootFolder = AppContext.BaseDirectory.Substring(0, AppContext.BaseDirectory.IndexOf("bin"));
@@ -36,9 +45,10 @@ namespace NotificationService.Consumer
                 });
             }
             //Here We will Add the EmailSending code
-            //--
-            //--    
-            //--
+            string[] mailAddresses = { result.Email };
+
+
+            await _emailSender.SendEmailAsync(new Message(mailAddresses,"Order "+result.Id, "From FacesAndFaces",result.Files));
 
             await context.Publish<IOrderDispatchedEvent>(new 
             {
