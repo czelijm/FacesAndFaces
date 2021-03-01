@@ -16,12 +16,16 @@ namespace Messaging.InterfacesConstants.Constants
         public const string Password = "guest";
         //this is the point, where our MVC project will send the data to
         public const string RegisterOrderCommandQueue = "register.order.command";
+        public const string NotificationServiceQueue = "notification.service.queue";
+        public const string OrderDispatchedServiceQueue = "orfder.dispatch.service.queue";
         public const string HostName = "localhost";
         public const string Port = "6001";
         public static string HostAddress = $"http://{HostName}:{Port}";
         public const string FaceApiUri = "/api/Faces";
         public const int RetryNumber = 2;
         public const int ItervalWaitTimeInSeconds = 10;
+        public const int PerfectchCount = 16;
+
 
 
     }
