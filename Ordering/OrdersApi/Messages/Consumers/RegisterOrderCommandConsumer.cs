@@ -1,5 +1,6 @@
 ﻿using MassTransit;
 using Messaging.InterfacesConstants.Commnads;
+using Messaging.InterfacesConstants.Events;
 using Newtonsoft.Json;
 using OrdersApi.Models;
 using OrdersApi.Persistence;
@@ -39,6 +40,15 @@ namespace OrdersApi.Messages.Consumers
                 List<byte[]> faces = orderDetailData.Item1;
                 Guid orderId = orderDetailData.Item2;
                 SaveOrderDeteils(orderId,faces);
+
+                //Send Order Processed Event massage to MessageBroker
+                await context.Publish<IOrderProcessedEvent>(new 
+                {
+                    Id = orderId,
+                    FileUrl = result.FileUrl,
+                    Files = faces,
+                    Email = result.Email
+                });
             }
             //return Task.FromResult();
         }

@@ -51,7 +51,7 @@ namespace EmailService
                 try
                 {
                     //ssl type connection to true
-                    await client.ConnectAsync(_emailConfig.StmpServer,_emailConfig.Port,true);
+                    await client.ConnectAsync(_emailConfig.SmtpServer,_emailConfig.Port,true);
                     client.AuthenticationMechanisms.Remove("XOAUTH2");
                     await client.AuthenticateAsync(_emailConfig.UserName,_emailConfig.Password);
                     await client.SendAsync(emailMessage);

@@ -27,14 +27,16 @@ namespace NotificationService
                 .ConfigureHostConfiguration(configHost =>
                 {
                     configHost.SetBasePath(Directory.GetCurrentDirectory());
-                    configHost.AddJsonFile($"credentialssettings.json", optional: false);
+                    configHost.AddJsonFile("appsettings.json", optional: false);
                     configHost.AddEnvironmentVariables();
                     configHost.AddCommandLine(args);//enable to host to read the command line
                 })
                 .ConfigureAppConfiguration((hostContext,config)=> 
                 {
-                    config.AddJsonFile($"appsettings.{hostContext.HostingEnvironment.EnvironmentName}.json",
-                        optional:false);
+                    //config.AddJsonFile($"appsettings.{hostContext.HostingEnvironment.EnvironmentName}.json",
+                    //    optional:false);
+                    config.AddJsonFile($"credentialssettings.json",
+                        optional:true,reloadOnChange:true);
                 })
                 .ConfigureServices((hostContext,services)=> 
                 {

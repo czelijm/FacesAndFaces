@@ -10,9 +10,9 @@ namespace OrdersApi.Messages.Consumers
 {
     public class OrderDispatchedEventConsumer : IConsumer<IOrderDispatchedEvent>
     { 
-        private readonly OrderRepository _orderRepository;
+        private readonly IOrderRepository _orderRepository;
 
-        public OrderDispatchedEventConsumer(OrderRepository orderRepository)
+        public OrderDispatchedEventConsumer(IOrderRepository orderRepository)
         {
             _orderRepository = orderRepository;
         }
