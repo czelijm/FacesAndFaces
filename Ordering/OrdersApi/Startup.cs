@@ -1,6 +1,7 @@
 using GreenPipes;
 using MassTransit;
 using Messaging.InterfacesConstants.Constants;
+using Messaging.InterfacesConstants.SignalR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using OrdersApi.Hubs;
 using OrdersApi.Messages.Consumers;
 using OrdersApi.Persistence;
 using OrdersApi.Services;
@@ -122,6 +124,13 @@ namespace OrdersApi
 
             services.AddTransient<IOrderRepository, OrderRepository>();
 
+            services.AddSignalR()
+                .AddJsonProtocol(options=> 
+                {
+                    options.PayloadSerializerOptions.PropertyNamingPolicy = null; //not change the policy naming
+
+                });
+
             services.AddHttpClient();
 
             //for order api endpoint to be called from other servers, we have to add cross origin resource policy
@@ -163,6 +172,7 @@ namespace OrdersApi
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<OrderHub>(EndPoints.OrderApiHubEndPoint);
             });
         }
     }

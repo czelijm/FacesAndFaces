@@ -1,7 +1,10 @@
 ﻿using MassTransit;
 using Messaging.InterfacesConstants.Commnads;
 using Messaging.InterfacesConstants.Events;
+using Messaging.InterfacesConstants.SignalR;
+using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
+using OrdersApi.Hubs;
 using OrdersApi.Models;
 using OrdersApi.Persistence;
 using System;
@@ -17,11 +20,13 @@ namespace OrdersApi.Messages.Consumers
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IHubContext<OrderHub> _hubContext;
 
-        public RegisterOrderCommandConsumer(IOrderRepository orderRepository,IHttpClientFactory httpClientFactory)
+        public RegisterOrderCommandConsumer(IOrderRepository orderRepository,IHttpClientFactory httpClientFactory, IHubContext<OrderHub> hubContext)
         {
             _orderRepository = orderRepository;
             _httpClientFactory = httpClientFactory;
+            _hubContext = hubContext;
         }
 
         public async Task Consume(ConsumeContext<IRegisterOrderCommand> context)
@@ -34,12 +39,19 @@ namespace OrdersApi.Messages.Consumers
             {
                 await SaveOrder(result);
 
+                //SignalR part
+                //Method "UpdateOrders" Should be on client side, eventName (parameter), other_parameter 
+                await _hubContext.Clients.All.SendAsync(ClientsMethodsName.UpdateOrdersOnClient, EventName.NewOrderCreated, result.Id);
+
                 //connetct to api via http, no messagebroker part
                 var client = _httpClientFactory.CreateClient();
                 Tuple<List<byte[]>,Guid> orderDetailData = await GetFacesFromFaceApiAsync(client, result.FileData, result.Id);
                 List<byte[]> faces = orderDetailData.Item1;
                 Guid orderId = orderDetailData.Item2;
                 SaveOrderDeteils(orderId,faces);
+
+                //SignalR part
+                await _hubContext.Clients.All.SendAsync(ClientsMethodsName.UpdateOrdersOnClient, EventName.OrderProcessed, result.Id);
 
                 //Send Order Processed Event massage to MessageBroker
                 await context.Publish<IOrderProcessedEvent>(new 

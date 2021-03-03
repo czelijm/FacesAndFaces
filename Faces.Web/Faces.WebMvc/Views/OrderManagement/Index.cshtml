@@ -1,4 +1,6 @@
 ﻿@model List<Faces.WebMvc.Models.ViewModels.OrderViewModel>
+@using Messaging.InterfacesConstants.Constants; 
+@using Messaging.InterfacesConstants.SignalR; 
 
 @{
     ViewData["Title"] = "Orders List";
@@ -43,3 +45,45 @@
     }
 
 </div>
+
+
+@section Scripts{
+    <script src="~/lib/signalr/dist/browser/signalr.min.js"></script>
+    <script type="text/javascript">
+
+        var timerId;
+        //connection between this client page and server
+        //ex. http://localhost:5500/orderhub, this /orderhub comes from the SignalR EndPoint registration address in the orderAPI's startup class 
+        //we bind client with the server address
+        const connetction = new signalR.HubConnectionBuilder()
+            .withUrl('@HostsAdresses.OrderApi'+'@EndPoints.OrderApiHubEndPoint')
+            .configureLogging(signalR.LogLevel.Debug)
+            .withAutomaticReconnect()
+            .build();
+
+        
+        //this will allow to call the callback method for server, when server triggers this method 
+        connetction.on('@ClientsMethodsName.UpdateOrdersOnClient', (message, id) => {
+
+            const encodedMsg = message + ':' + id;
+            console.log(encodedMsg);
+            if (id && id.length) {
+                toastr.success(id + ' Updated to status: ' + message);
+                refreshPage();
+            }
+
+        });
+
+        function refreshPage() {
+            clearTimeout(timerId);
+            timerId = setTimeout(function () {
+                window.location.reload();
+            },3000);
+        };
+
+        
+        connetction.start().catch(err => console.error(err).toString());
+
+    </script>
+
+}
