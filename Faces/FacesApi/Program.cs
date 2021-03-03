@@ -21,6 +21,11 @@ namespace FacesApi
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+                })
+                .ConfigureAppConfiguration((hostContext, config) =>
+                {
+                    config.AddJsonFile($"credentialssettings.json",
+                        optional: true, reloadOnChange: true);
                 });
     }
 }
