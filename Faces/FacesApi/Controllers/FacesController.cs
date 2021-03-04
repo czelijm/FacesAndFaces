@@ -45,10 +45,10 @@ namespace FacesApi.Controllers
             {
                 await Request.Body.CopyToAsync(ms);
                 if (ms.Length < 1) return new Tuple<List<byte[]>, Guid>(null, orderId);
-                //Image from ImageSharp
-                //Image image = Image.Load(ms.ToArray());
-                //image.Save("dumy.jpg");
-                facesCropped = await UploadAndDetectFaces(ms);
+                ////Image from ImageSharp
+                Image image = Image.Load(ms.ToArray());
+                image.Save("dumy.jpg");
+                facesCropped = await UploadAndDetectFaces(new MemoryStream(ms.ToArray()));//It requries new memorystream object, in other case badrequest
                 //return faces;
                 return new Tuple<List<byte[]>, Guid>(facesCropped, orderId);
             }
@@ -57,7 +57,16 @@ namespace FacesApi.Controllers
         //remenber to check Include prerelease checkbox
         public static IFaceClient Authenticate(string endpoint, string key) 
         {
-            return new FaceClient(new ApiKeyServiceClientCredentials(key)) { Endpoint = endpoint };
+
+            if (Uri.IsWellFormedUriString(endpoint, UriKind.Absolute))
+            {
+                return new FaceClient(new ApiKeyServiceClientCredentials(key)) { Endpoint = endpoint };
+            }
+            else 
+            {
+                return null;
+            }
+
         }
 
         private async Task<List<byte[]>> UploadAndDetectFaces(MemoryStream ms)
@@ -69,26 +78,28 @@ namespace FacesApi.Controllers
             var faceList = new List<byte[]>();
             IList<DetectedFace> faces = null;
             Image image = Image.Load(ms.ToArray());
+            
             try
             {
+                
                 faces = await client.Face.DetectWithStreamAsync(ms,true,false,null);
                 int j = 0;
                 foreach (var face in faces)
                 {
                     var memoryStreamForImage = new MemoryStream();
-                    
+
                     //var zoom = 1.0;
                     //int h = (int)(face.FaceRectangle.Height / zoom);
 
                     ////Save image as file
-                    //image.Clone(ctx=>
-                    //    ctx.Crop(
-                    //        new Rectangle(
-                    //        face.FaceRectangle.Left,
-                    //        face.FaceRectangle.Top,
-                    //        face.FaceRectangle.Width,
-                    //        face.FaceRectangle.Height
-                    //    ))).Save("face"+j+".jpg");
+                    image.Clone(ctx =>
+                        ctx.Crop(
+                            new Rectangle(
+                            face.FaceRectangle.Left,
+                            face.FaceRectangle.Top,
+                            face.FaceRectangle.Width,
+                            face.FaceRectangle.Height
+                        ))).Save("face" + j + ".jpg");
 
                     //Save image as memorystream
                     await image.Clone(ctx =>
@@ -106,10 +117,10 @@ namespace FacesApi.Controllers
 
 
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                Console.WriteLine(ex);
+                throw ex;
             }
 
             return faceList;
