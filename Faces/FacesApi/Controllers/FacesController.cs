@@ -46,8 +46,8 @@ namespace FacesApi.Controllers
                 await Request.Body.CopyToAsync(ms);
                 if (ms.Length < 1) return new Tuple<List<byte[]>, Guid>(null, orderId);
                 ////Image from ImageSharp
-                Image image = Image.Load(ms.ToArray());
-                image.Save("dumy.jpg");
+                //Image image = Image.Load(ms.ToArray());
+                //image.Save("dumy.jpg");
                 facesCropped = await UploadAndDetectFaces(new MemoryStream(ms.ToArray()));//It requries new memorystream object, in other case badrequest
                 //return faces;
                 return new Tuple<List<byte[]>, Guid>(facesCropped, orderId);
@@ -58,14 +58,15 @@ namespace FacesApi.Controllers
         public static IFaceClient Authenticate(string endpoint, string key) 
         {
 
-            if (Uri.IsWellFormedUriString(endpoint, UriKind.Absolute))
-            {
-                return new FaceClient(new ApiKeyServiceClientCredentials(key)) { Endpoint = endpoint };
-            }
-            else 
-            {
-                return null;
-            }
+            //if (Uri.IsWellFormedUriString(endpoint, UriKind.Absolute))
+            //{
+            //    return new FaceClient(new ApiKeyServiceClientCredentials(key)) { Endpoint = endpoint };
+            //}
+            //else 
+            //{
+            //    return null;
+            //}
+            return new FaceClient(new ApiKeyServiceClientCredentials(key)) { Endpoint = endpoint };
 
         }
 
@@ -92,14 +93,14 @@ namespace FacesApi.Controllers
                     //int h = (int)(face.FaceRectangle.Height / zoom);
 
                     ////Save image as file
-                    image.Clone(ctx =>
-                        ctx.Crop(
-                            new Rectangle(
-                            face.FaceRectangle.Left,
-                            face.FaceRectangle.Top,
-                            face.FaceRectangle.Width,
-                            face.FaceRectangle.Height
-                        ))).Save("face" + j + ".jpg");
+                    //image.Clone(ctx =>
+                    //    ctx.Crop(
+                    //        new Rectangle(
+                    //        face.FaceRectangle.Left,
+                    //        face.FaceRectangle.Top,
+                    //        face.FaceRectangle.Width,
+                    //        face.FaceRectangle.Height
+                    //    ))).Save("face" + j + ".jpg");
 
                     //Save image as memorystream
                     await image.Clone(ctx =>
