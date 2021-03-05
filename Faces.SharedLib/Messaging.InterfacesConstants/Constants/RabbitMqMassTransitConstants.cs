@@ -19,7 +19,9 @@ namespace Messaging.InterfacesConstants.Constants
         public const string NotificationServiceQueue = "notification.service.queue";
         public const string OrderDispatchedServiceQueue = "orfder.dispatch.service.queue";
         public const string HostName = "localhost";
-        public const string Port = "6001";
+        //public const string Port = "6001";
+        //public const string HostName = "rabbitmq";
+        public const string Port = "6100";
         public static string HostAddress = $"http://{HostName}:{Port}";
         public const string FaceApiUri = "/api/Faces";
         public const int RetryNumber = 2;

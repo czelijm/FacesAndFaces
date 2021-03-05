@@ -69,23 +69,24 @@ namespace NotificationService.Consumer
             var rootFolder = AppContext.BaseDirectory.Substring(0, AppContext.BaseDirectory.IndexOf("bin"));
             var result = context.Message;
             var fileData = result.Files;
-            if (fileData.Count < 1)
-            {
-                await Console.Out.WriteLineAsync("No Faces Detected");
-            }
-            else
-            {
-                fileData.Select((v, i) => new { item = v, index = i }).ToList()
-                .ForEach(f =>
-                {
-                    //loading byte[] to memory stream
-                    MemoryStream memoryStream = new MemoryStream(f.item);
-                    //create image from memorystream
-                    var image = SixLabors.ImageSharp.Image.Load(memoryStream.ToArray());
-                    //saving image in root folder
-                    image.Save($"{rootFolder}/Images/face{f.index}.jpg");
-                });
-            }
+            ////For Image saving on the server, for testing pupopses
+            //if (fileData.Count < 1)
+            //{
+            //    await Console.Out.WriteLineAsync("No Faces Detected");
+            //}
+            //else
+            //{
+            //    fileData.Select((v, i) => new { item = v, index = i }).ToList()
+            //    .ForEach(f =>
+            //    {
+            //        //loading byte[] to memory stream
+            //        MemoryStream memoryStream = new MemoryStream(f.item);
+            //        //create image from memorystream
+            //        var image = SixLabors.ImageSharp.Image.Load(memoryStream.ToArray());
+            //        //saving image in root folder
+            //        image.Save($"{rootFolder}/Images/face{f.index}.jpg");
+            //    });
+            //}
             //Here We will Add the EmailSending code
             string[] mailAddresses = { result.Email };
 

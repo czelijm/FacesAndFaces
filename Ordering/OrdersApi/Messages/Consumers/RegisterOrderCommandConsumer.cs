@@ -3,10 +3,12 @@ using Messaging.InterfacesConstants.Commnads;
 using Messaging.InterfacesConstants.Events;
 using Messaging.InterfacesConstants.SignalR;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using OrdersApi.Hubs;
 using OrdersApi.Models;
 using OrdersApi.Persistence;
+using OrdersApi.Settings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,12 +23,14 @@ namespace OrdersApi.Messages.Consumers
         private readonly IOrderRepository _orderRepository;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IHubContext<OrderHub> _hubContext;
+        private readonly IOptions<OrderSettings> _settings;
 
-        public RegisterOrderCommandConsumer(IOrderRepository orderRepository,IHttpClientFactory httpClientFactory, IHubContext<OrderHub> hubContext)
+        public RegisterOrderCommandConsumer(IOrderRepository orderRepository,IHttpClientFactory httpClientFactory, IHubContext<OrderHub> hubContext, IOptions<OrderSettings> settings)
         {
             _orderRepository = orderRepository;
             _httpClientFactory = httpClientFactory;
             _hubContext = hubContext;
+            _settings = settings;
         }
 
         public async Task Consume(ConsumeContext<IRegisterOrderCommand> context)
@@ -95,9 +99,15 @@ namespace OrdersApi.Messages.Consumers
             var byteArrayContent = new ByteArrayContent(fileData);
             Tuple<List<byte[]>, Guid> orderDetailDataFromResponse = null;
             byteArrayContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/octete-stream");
-            string requestUri = Messaging.InterfacesConstants.Constants.RabbitMqMassTransitConstants.HostAddress
+
+            //string requestUri = Messaging.InterfacesConstants.Constants.RabbitMqMassTransitConstants.HostAddress
+            //   + Messaging.InterfacesConstants.Constants.RabbitMqMassTransitConstants.FaceApiUri 
+            //   + "?orderId=" + orderId.ToString();
+
+            string requestUri = _settings.Value.FacesApiUrl
                + Messaging.InterfacesConstants.Constants.RabbitMqMassTransitConstants.FaceApiUri 
                + "?orderId=" + orderId.ToString();
+            
             using (var response = await client.PostAsync(requestUri,byteArrayContent))
             {
                 string apiResponse = await response.Content.ReadAsStringAsync();

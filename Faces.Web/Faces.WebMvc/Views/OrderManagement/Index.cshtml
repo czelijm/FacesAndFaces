@@ -1,6 +1,8 @@
 ﻿@model List<Faces.WebMvc.Models.ViewModels.OrderViewModel>
 @using Messaging.InterfacesConstants.Constants; 
 @using Messaging.InterfacesConstants.SignalR; 
+@using Microsoft.Extensions.Options;
+@inject IOptions<Faces.WebMvc.Settings.AppSettings> settings;
 
 @{
     ViewData["Title"] = "Orders List";
@@ -56,7 +58,8 @@
         //ex. http://localhost:5500/orderhub, this /orderhub comes from the SignalR EndPoint registration address in the orderAPI's startup class 
         //we bind client with the server address
         const connetction = new signalR.HubConnectionBuilder()
-            .withUrl('@HostsAdresses.OrderApi'+'@EndPoints.OrderApiHubEndPoint')
+            //.withUrl('/**/@HostsAdresses.OrderApi'+'@EndPoints.OrderApiHubEndPoint')
+            .withUrl('@settings.Value.SignalRHubUrl'+'@EndPoints.OrderApiHubEndPoint')
             .configureLogging(signalR.LogLevel.Debug)
             .withAutomaticReconnect()
             .build();

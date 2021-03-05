@@ -39,6 +39,10 @@ namespace OrdersApi
                 Configuration.GetConnectionString("OrderContextConnection")        
             ));
 
+            //For aplly configuration from appseting.FacesApiUrl to OrderSettings.FacesApiUrl 
+            services.Configure<Settings.OrderSettings>(Configuration);
+
+
             services.AddMassTransit(c =>
                {
                    //there will be 2 consumers
@@ -174,6 +178,10 @@ namespace OrdersApi
                 endpoints.MapControllers();
                 endpoints.MapHub<OrderHub>(EndPoints.OrderApiHubEndPoint);
             });
+
+            using var scope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope();
+            scope.ServiceProvider.GetService<OrdersContext>().MigrateDB(); //To be able to call MigrationDb Here
+
         }
     }
 }
