@@ -36,7 +36,8 @@ namespace OrdersApi
         {
             services.AddDbContext<OrdersContext>(options=>options.UseSqlServer
             (
-                Configuration.GetConnectionString("OrderContextConnection")        
+             //   Configuration.GetConnectionString("OrderContextConnection")        
+                Configuration["OrderContextConnection"]        
             ));
 
             //For aplly configuration from appseting.FacesApiUrl to OrderSettings.FacesApiUrl 

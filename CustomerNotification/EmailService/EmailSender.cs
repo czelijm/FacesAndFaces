@@ -37,7 +37,7 @@ namespace EmailService
                 message.Attachements.Select((v, i) => new { item = v, index = (i+1) }).ToList()
                 .ForEach(a=> 
                 {
-                    bodyBuilder.Attachments.Add($"attachment{a.index}",a.item);
+                    bodyBuilder.Attachments.Add($"attachment{a.index}.jpg",a.item);
                 });
             }
             emailMessage.Body = bodyBuilder.ToMessageBody();
